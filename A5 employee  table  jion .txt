@@ -1,6 +1,4 @@
-/* 1. CREATE TABLES */
 
-/* STUDENT TABLE */
 CREATE TABLE STUDENT (
     Student_ID NUMBER PRIMARY KEY,
     Name VARCHAR2(50) NOT NULL,
@@ -10,14 +8,14 @@ CREATE TABLE STUDENT (
     Age NUMBER CHECK (Age >= 18)
 );
 
-/* COURSE TABLE */
+
 CREATE TABLE COURSE (
     Course_ID NUMBER PRIMARY KEY,
     Course_Name VARCHAR2(50) NOT NULL,
     Fees NUMBER(8,2) CHECK (Fees > 0)
 );
 
-/* ENROLLMENT TABLE */
+
 CREATE TABLE ENROLLMENT (
     Enroll_ID NUMBER PRIMARY KEY,
     Student_ID NUMBER,
@@ -32,7 +30,7 @@ CONSTRAINT fk_course
 );
 
 
-/* 2. INSERT SAMPLE DATA */
+
 
 INSERT INTO STUDENT VALUES (1, 'Amit', 'Male', 'Pune', '9876543210', 22);
 INSERT INTO STUDENT VALUES (2, 'Rahul', 'Male', 'Mumbai', '9876543211', 24);
@@ -53,23 +51,19 @@ INSERT INTO ENROLLMENT VALUES (4, 4, 104, TO_DATE('15-01-2025','DD-MM-YYYY'));
 COMMIT;
 
 
-/* 3. QUERIES */
 
-/* Display students whose age is greater than average age */
-SELECT *
-FROM STUDENT
+
+
+SELECT *FROM STUDENT
 WHERE Age > (SELECT AVG(Age) FROM STUDENT);
 
 
-/* Display course having maximum fees */
-SELECT *
-FROM COURSE
+SELECT *FROM COURSE
 WHERE Fees = (SELECT MAX(Fees) FROM COURSE);
 
 
-/* Display students enrolled in course having highest fees */
-SELECT S.*
-FROM STUDENT S
+
+SELECT S.*FROM STUDENT S
 JOIN ENROLLMENT E
 ON S.Student_ID = E.Student_ID
 JOIN COURSE C
@@ -77,9 +71,8 @@ ON E.Course_ID = C.Course_ID
 WHERE C.Fees = (SELECT MAX(Fees) FROM COURSE);
 
 
-/* Display students from the same city as student 'Amit' */
-SELECT *
-FROM STUDENT
+
+SELECT *FROM STUDENT
 WHERE City = (
     SELECT City
     FROM STUDENT
@@ -87,9 +80,8 @@ WHERE City = (
 );
 
 
-/* Display courses not enrolled by any student */
-SELECT *
-FROM COURSE
+
+SELECT *FROM COURSE
 WHERE Course_ID NOT IN (
     SELECT Course_ID
     FROM ENROLLMENT
