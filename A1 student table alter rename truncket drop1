@@ -1,4 +1,4 @@
-CREATE TABLE STUDENT (
+CREATE TABLE STUDENT1 (
     Student_ID NUMBER(5) PRIMARY KEY,
     Name VARCHAR2(50) NOT NULL,
     Gender VARCHAR2(10) CHECK (Gender IN ('Male','Female','Other')),
@@ -7,13 +7,13 @@ CREATE TABLE STUDENT (
     Age NUMBER(3) CHECK (Age >= 18)
 );
 desc student;
-CREATE TABLE COURSE (
+CREATE TABLE COURSE 1(
     Course_ID NUMBER(5) PRIMARY KEY,
     Course_Name VARCHAR2(50) NOT NULL,
     Fees NUMBER(8,2) CHECK (Fees > 0)
 );
 desc course;
-CREATE TABLE ENROLLMENT (
+CREATE TABLE ENROLLMENT1 (
     Enroll_ID NUMBER PRIMARY KEY,
     Student_ID NUMBER,
     Course_ID NUMBER,
