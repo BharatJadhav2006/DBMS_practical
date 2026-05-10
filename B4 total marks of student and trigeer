@@ -1,0 +1,118 @@
+CREATE TABLE student3 (
+    student_id NUMBER(5) PRIMARY KEY,
+    name VARCHAR2(50),
+    subject1 NUMBER(5),
+    subject2 NUMBER(5),
+    subject3 NUMBER(5)
+);
+
+INSERT INTO student3
+VALUES (1, 'Rahul', 80, 75, 90);
+
+INSERT INTO student3
+VALUES (2, 'Sneha', 85, 88, 92);
+
+COMMIT;
+
+CREATE OR REPLACE PROCEDURE total_marks(
+    sid NUMBER
+)
+IS
+    s1 NUMBER;
+    s2 NUMBER;
+    s3 NUMBER;
+    total NUMBER;
+BEGIN
+
+    SELECT subject1, subject2, subject3
+    INTO s1, s2, s3
+    FROM student3
+    WHERE student_id = sid;
+
+    total := s1 + s2 + s3;
+
+    DBMS_OUTPUT.PUT_LINE('Total Marks = ' || total);
+
+END;
+/
+
+BEGIN
+    total_marks(1);
+END;
+/
+
+CREATE TABLE library2 (
+    book_id NUMBER(5) PRIMARY KEY,
+    book_name VARCHAR2(50),
+    author VARCHAR2(50),
+    price NUMBER(8,2)
+);
+
+INSERT INTO library2
+VALUES (1, 'Java', 'James', 500);
+
+INSERT INTO library2
+VALUES (2, 'Python', 'Guido', 700);
+
+COMMIT;
+
+CREATE TABLE library_audit2 (
+    book_id NUMBER(5),
+    book_name VARCHAR2(50),
+    author VARCHAR2(50),
+    price NUMBER(8,2),
+    action_type VARCHAR2(20),
+    action_date DATE
+);
+
+CREATE OR REPLACE TRIGGER trg_library2
+BEFORE UPDATE OR DELETE
+ON library2
+FOR EACH ROW
+
+BEGIN
+
+    IF UPDATING THEN
+
+        INSERT INTO library_audit2
+        VALUES (
+            :OLD.book_id,
+            :OLD.book_name,
+            :OLD.author,
+            :OLD.price,
+            'UPDATE',
+            SYSDATE
+        );
+
+    ELSIF DELETING THEN
+
+        INSERT INTO library_audit2
+        VALUES (
+            :OLD.book_id,
+            :OLD.book_name,
+            :OLD.author,
+            :OLD.price,
+            'DELETE',
+            SYSDATE
+        );
+
+    END IF;
+
+END;
+/
+
+
+UPDATE library2
+SET price = 800
+WHERE book_id = 1;
+
+DELETE FROM library2
+WHERE book_id = 2;
+
+COMMIT;
+
+SELECT * FROM library_audit2;
+
+
+
+
