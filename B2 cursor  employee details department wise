@@ -1,83 +1,92 @@
-SET SERVEROUTPUT ON;
-
-CREATE TABLE Employee(
-    Emp_ID NUMBER,
-    Emp_Name VARCHAR2(50),
-    Department VARCHAR2(50),
-    Salary NUMBER
+CREATE TABLE employee (
+    emp_id NUMBER,
+    emp_name VARCHAR2(50),
+    department VARCHAR2(50),
+    salary NUMBER
 );
 
-INSERT INTO Employee VALUES(1,'Rahul','IT',25000);
-INSERT INTO Employee VALUES(2,'Amit','HR',20000);
-INSERT INTO Employee VALUES(3,'Sneha','IT',30000);
-INSERT INTO Employee VALUES(4,'Priya','Sales',22000);
+INSERT INTO employee VALUES (1, 'Rahul', 'IT', 30000);
+
+INSERT INTO employee VALUES (2, 'Amit', 'HR', 25000);
+
+INSERT INTO employee VALUES (3, 'Sneha', 'IT', 35000);
+
+INSERT INTO employee VALUES (4, 'Priya', 'Sales', 28000);
 
 COMMIT;
 
+SELECT * FROM employee;
+
+SET SERVEROUTPUT ON;
+
 DECLARE
 
-CURSOR emp_cursor IS
-SELECT Emp_ID, Emp_Name, Department, Salary
-FROM Employee
-ORDER BY Department;
+    CURSOR emp_cursor IS
+    SELECT emp_id, emp_name, department, salary
+    FROM employee
+    ORDER BY department;
 
-v_id Employee.Emp_ID%TYPE;
-v_name Employee.Emp_Name%TYPE;
-v_dept Employee.Department%TYPE;
-v_salary Employee.Salary%TYPE;
+    v_id employee.emp_id%TYPE;
+    v_name employee.emp_name%TYPE;
+    v_dept employee.department%TYPE;
+    v_salary employee.salary%TYPE;
 
 BEGIN
 
-OPEN emp_cursor;
+    OPEN emp_cursor;
 
-LOOP
+    LOOP
 
-FETCH emp_cursor INTO v_id, v_name, v_dept, v_salary;
+        FETCH emp_cursor
+        INTO v_id, v_name, v_dept, v_salary;
 
-EXIT WHEN emp_cursor%NOTFOUND;
+        EXIT WHEN emp_cursor%NOTFOUND;
 
-DBMS_OUTPUT.PUT_LINE(
-'ID: ' || v_id ||
-' NAME: ' || v_name ||
-' DEPT: ' || v_dept ||
-' SALARY: ' || v_salary);
+        DBMS_OUTPUT.PUT_LINE(
+            'ID: ' || v_id ||
+            ' NAME: ' || v_name ||
+            ' DEPARTMENT: ' || v_dept ||
+            ' SALARY: ' || v_salary
+        );
 
-END LOOP;
+    END LOOP;
 
-CLOSE emp_cursor;
+    CLOSE emp_cursor;
 
 END;
 /
 
-CREATE TABLE Salary_Log(
-    Emp_ID NUMBER,
-    Old_Salary NUMBER,
-    New_Salary NUMBER,
-    Update_Date DATE
+CREATE TABLE salary_log (
+    emp_id NUMBER,
+    old_salary NUMBER,
+    new_salary NUMBER,
+    update_date DATE
 );
 
-CREATE OR REPLACE TRIGGER trg_salary
-BEFORE UPDATE OF Salary
-ON Employee
+CREATE OR REPLACE TRIGGER trg_salary_update
+
+BEFORE UPDATE OF salary
+ON employee
+
 FOR EACH ROW
 
 BEGIN
 
-INSERT INTO Salary_Log
-VALUES(
-    :OLD.Emp_ID,
-    :OLD.Salary,
-    :NEW.Salary,
-    SYSDATE
-);
+    INSERT INTO salary_log
+    VALUES (
+        :OLD.emp_id,
+        :OLD.salary,
+        :NEW.salary,
+        SYSDATE
+    );
 
 END;
 /
 
-UPDATE Employee
-SET Salary = 35000
-WHERE Emp_ID = 1;
+UPDATE employee
+SET salary = 40000
+WHERE emp_id = 1;
 
 COMMIT;
 
-SELECT * FROM Salary_Log;
+SELECT * FROM salary_log;
