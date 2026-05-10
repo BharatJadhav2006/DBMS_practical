@@ -1,0 +1,67 @@
+use("CollegeDB")
+
+db.students.insertMany([
+  {
+    Student_ID: 1,
+    Name: "Amit",
+    City: "Pune",
+    Age: 20,
+    Marks: 85
+  },
+  {
+    Student_ID: 2,
+    Name: "Sneha",
+    City: "Mumbai",
+    Age: 21,
+    Marks: 72
+  },
+  {
+    Student_ID: 3,
+    Name: "Rahul",
+    City: "Nashik",
+    Age: 19,
+    Marks: 90
+  },
+  {
+    Student_ID: 4,
+    Name: "Priya",
+    City: "Pune",
+    Age: 22,
+    Marks: 65
+  }
+])
+
+db.students.insertOne({
+  Student_ID: 5,
+  Name: "Neha",
+  City: "Nagpur",
+  Age: 20,
+  Marks: 78
+})
+
+db.students.find()
+
+db.students.find({
+  $and: [
+    { City: "Pune" },
+    { Marks: { $gt: 70 } }
+  ]
+})
+
+db.students.find({
+  $or: [
+    { City: "Mumbai" },
+    { Marks: { $gt: 85 } }
+  ]
+})
+
+db.students.updateOne(
+  { Name: "Sneha" },
+  { $set: { Marks: 80 } }
+)
+
+db.students.find({ Name: "Sneha" })
+
+db.students.deleteOne({ Student_ID: 4 })
+
+db.students.find()
