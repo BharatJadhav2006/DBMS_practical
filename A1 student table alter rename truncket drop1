@@ -36,3 +36,7 @@ RENAME COURSE TO COURSE_DETAILS;
 TRUNCATE TABLE ENROLLMENT;
 
 DROP TABLE COURSE_DETAILS;
+drop table courses_details  cascade constraint;
+
+
+
