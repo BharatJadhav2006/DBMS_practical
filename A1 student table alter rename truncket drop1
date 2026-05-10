@@ -14,21 +14,19 @@ CREATE TABLE COURSE (
 );
 desc course;
 CREATE TABLE ENROLLMENT (
-    Enroll_ID NUMBER(5) PRIMARY KEY,
-    Student_ID NUMBER(5),
-    Course_ID NUMBER(5),
-    Admission_Date DATE
+    Enroll_ID NUMBER PRIMARY KEY,
+    Student_ID NUMBER,
+    Course_ID NUMBER,
+    Admission_Date DATE,
+CONSTRAINT fk_student
+        FOREIGN KEY (Student_ID)
+        REFERENCES STUDENT(Student_ID),
+CONSTRAINT fk_course
+        FOREIGN KEY (Course_ID)
+        REFERENCES COURSE(Course_ID)
 );
-desc enrollment;
-ALTER TABLE ENROLLMENT
-ADD CONSTRAINT FK_STUDENT
-FOREIGN KEY (Student_ID)
-REFERENCES STUDENT(Student_ID);
 
-ALTER TABLE ENROLLMENT
-ADD CONSTRAINT FK_COURSE
-FOREIGN KEY (Course_ID)
-REFERENCES COURSE(Course_ID);
+desc enrollment;
 
 ALTER TABLE STUDENT
    ADD Email VARCHAR2(50);
