@@ -1,0 +1,62 @@
+db.employees.insertMany([
+  {
+    emp_id: 101,
+    name: "Amit Sharma",
+    department: "HR",
+    salary: 35000,
+    city: "Pune"
+  },
+  {
+    emp_id: 102,
+    name: "Neha Patil",
+    department: "IT",
+    salary: 55000,
+    city: "Mumbai"
+  },
+  {
+    emp_id: 103,
+    name: "Rahul Verma",
+    department: "Finance",
+    salary: 45000,
+    city: "Delhi"
+  },
+  {
+    emp_id: 104,
+    name: "Sneha Joshi",
+    department: "IT",
+    salary: 60000,
+    city: "Pune"
+  }
+]);
+
+db.employees.find();
+
+db.employees.find({
+  $and: [
+    { department: "IT" },
+    { salary: { $gt: 50000 } }
+  ]
+});
+
+db.employees.find({
+  $or: [
+    { city: "Pune" },
+    { salary: { $lt: 40000 } }
+  ]
+});
+
+db.employees.find({
+  department: { $ne: "HR" }
+});
+
+
+db.employees.updateOne(
+  { emp_id: 103 },
+  { $set: { salary: 50000 } }
+);
+
+db.employees.find({ emp_id: 103 });
+
+db.employees.deleteOne({ emp_id: 101 });
+
+db.employees.find();
