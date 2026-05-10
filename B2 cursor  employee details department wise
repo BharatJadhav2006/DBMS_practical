@@ -1,0 +1,83 @@
+SET SERVEROUTPUT ON;
+
+CREATE TABLE Employee(
+    Emp_ID NUMBER,
+    Emp_Name VARCHAR2(50),
+    Department VARCHAR2(50),
+    Salary NUMBER
+);
+
+INSERT INTO Employee VALUES(1,'Rahul','IT',25000);
+INSERT INTO Employee VALUES(2,'Amit','HR',20000);
+INSERT INTO Employee VALUES(3,'Sneha','IT',30000);
+INSERT INTO Employee VALUES(4,'Priya','Sales',22000);
+
+COMMIT;
+
+DECLARE
+
+CURSOR emp_cursor IS
+SELECT Emp_ID, Emp_Name, Department, Salary
+FROM Employee
+ORDER BY Department;
+
+v_id Employee.Emp_ID%TYPE;
+v_name Employee.Emp_Name%TYPE;
+v_dept Employee.Department%TYPE;
+v_salary Employee.Salary%TYPE;
+
+BEGIN
+
+OPEN emp_cursor;
+
+LOOP
+
+FETCH emp_cursor INTO v_id, v_name, v_dept, v_salary;
+
+EXIT WHEN emp_cursor%NOTFOUND;
+
+DBMS_OUTPUT.PUT_LINE(
+'ID: ' || v_id ||
+' NAME: ' || v_name ||
+' DEPT: ' || v_dept ||
+' SALARY: ' || v_salary);
+
+END LOOP;
+
+CLOSE emp_cursor;
+
+END;
+/
+
+CREATE TABLE Salary_Log(
+    Emp_ID NUMBER,
+    Old_Salary NUMBER,
+    New_Salary NUMBER,
+    Update_Date DATE
+);
+
+CREATE OR REPLACE TRIGGER trg_salary
+BEFORE UPDATE OF Salary
+ON Employee
+FOR EACH ROW
+
+BEGIN
+
+INSERT INTO Salary_Log
+VALUES(
+    :OLD.Emp_ID,
+    :OLD.Salary,
+    :NEW.Salary,
+    SYSDATE
+);
+
+END;
+/
+
+UPDATE Employee
+SET Salary = 35000
+WHERE Emp_ID = 1;
+
+COMMIT;
+
+SELECT * FROM Salary_Log;
